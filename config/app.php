@@ -161,6 +161,8 @@ return [
         Yuansir\Toastr\ToastrServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+
+        'Maatwebsite\Excel\ExcelServiceProvider',
     ],
 
     /*
@@ -211,6 +213,8 @@ return [
         'Toastr' => Yuansir\Toastr\Facades\Toastr::class,
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+
+        'Excel' => 'Maatwebsite\Excel\Facades\Excel',
     ],
 
 ];
