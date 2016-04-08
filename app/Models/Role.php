@@ -18,7 +18,7 @@ class Role extends EntrustRole implements Transformable
      */
     public function users()
     {
-        return $this->belongsToMany('App\Models\AdminUser');
+        return $this->belongsToMany('App\Models\User');
     }
 
 }

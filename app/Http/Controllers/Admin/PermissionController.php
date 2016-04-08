@@ -41,7 +41,7 @@ class PermissionController extends BaseController
             $breadcrumbs->push('权限列表', route('admin.permission.index'));
         });
 
-        $permissions = $this->permission->topPermissions();
+        $permissions = $this->permission->all();
         return view('admin.rbac.permissions.index', compact('permissions'));
     }
 

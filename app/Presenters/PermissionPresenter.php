@@ -115,4 +115,151 @@ class PermissionPresenter extends FractalPresenter
 
         return $html;
     }
+
+    public function adminMenus()
+    {
+        $menus = $this->permission->menus(1);
+        
+        $menuItems[] = "<div class='admin-sidebar am-offcanvas' id='admin-offcanvas'>";
+        $menuItems[] = "<div class='am-offcanvas-bar admin-offcanvas-bar'>";
+        $menuItems[] = "<ul id='sidebar-nav-0' class='am-nav am-nav-zj am-collapse am-in'>";
+        $currentRoute = Route::currentRouteName();
+        $parentRoute = strrpos($currentRoute, ".");
+        
+        if($menus) {
+            foreach ($menus as $menu) {
+	            if (!Auth::guard('admin')->user()->can($menu['name'])){
+		            continue;
+	            }
+	            
+                if(($menu['name'] !== '#') && !Route::has($menu['name'])) {
+                    continue;
+                }
+
+                $subMenuItems = array();
+                $isActive = false;
+
+                if(isset($menu['sub'])) {
+                    foreach ($menu['sub'] as $sub) {
+	                    if (!Auth::guard('admin')->user()->can($sub['name'])){
+				            continue;
+			            }
+	                    
+	                    $subMenuItems[] = "<li class='am-panel am-panel-zj";
+                        if($sub['name'] == $currentRoute) {
+	                    	$subMenuItems[] = " am-active";
+	                    	$isActive = true;
+	                	} else {
+                            if (strncmp($currentRoute, $sub['name'], $parentRoute) == 0) {
+                                $subMenuItems[] = " am-active";
+                                $isActive = true;
+                            }
+                        }
+	                    $subMenuItems[] = "'>";
+	                    
+	                    $subMenuItems[] = "<a href='";
+	                    $subMenuItems[] = ($sub['name'] == '#') ? '#' : route($sub['name']);
+	                    $subMenuItems[] = "'>";
+	                    
+	                    $subMenuItems[] = "<span class='".$sub['icon']."'></span>";
+	                    $subMenuItems[] = " ".$sub['display_name'];
+	                    
+	                    $subMenuItems[] = "</a>";
+	                    $subMenuItems[] = "</li>";
+	                }
+
+	                $menuItems[] = "<li class='am-panel am-panel-zj'> ";
+	                $menuItems[] = "<a class='am-cf' data-am-collapse=\"";
+	                $menuItems[] = "{parent: '#sidebar-nav-0', target: '#sidebar-nav-".$menu['id']."'}";
+	                $menuItems[] = "\">";
+	                $menuItems[] = "<span class='".$menu['icon']."'></span>";
+                    $menuItems[] = "<span class='am-icon-angle-right am-fr am-margin-right'></span>";
+	                $menuItems[] = " ".$menu['display_name'];
+	                $menuItems[] = "</a>";
+	                
+	                if (count($subMenuItems) > 0) {
+		                $menuItems[] = "<ul id='sidebar-nav-".$menu['id']."'";
+		                $menuItems[] = " class='am-nav am-nav-zj am-collapse";
+		                if ($isActive) {
+			                $menuItems[] = " am-in";
+		                }
+		                $menuItems[] = "'>";
+		                $menuItems[] = join("", $subMenuItems);
+		                $menuItems[] = "</ul>";
+	                }
+	                
+	                $menuItems[] = "</li>";
+                }
+            }
+            $menuItems[] = "</ul>";
+            $menuItems[] = "</div>";
+            $menuItems[] = "</div>";
+        }
+
+        return join("", $menuItems);
+
+
+        $curRoute = Route::currentRouteName();
+
+        if (Auth::guard('admin')->user()->is_super) {
+            if (Auth::guard('admin')->user()->can("admin.user.index")
+                || Auth::guard('admin')->user()->can("admin.user.create")
+                || Auth::guard('admin')->user()->can("admin.user.edit")
+                || Auth::guard('admin')->user()->can("admin.user.update")
+                || Auth::guard('admin')->user()->can("admin.user.destroy")) {
+                if ($curRoute == "admin.user.index"
+                    ||$curRoute == "admin.user.create"
+                    ||$curRoute == "admin.user.edit"
+                    ||$curRoute == "admin.user.update"
+                    ||$curRoute == "admin.user.destroy") {
+
+                }
+                $active = "admin.user.index" == $curRoute ? " am-active" : "";
+                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
+                $html[] = "<a href='".route("admin.user.index")."'>";
+                $html[] = "<span class='am-icon-tasks'></span> 用户管理";
+                $html[] = "</a>";
+                $html[] = "</li>";
+            }
+
+            if (Auth::guard('admin')->user()->can("admin.role.index")) {
+                $active = "admin.role.index" == $curRoute ? " am-active" : "";
+                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
+                $html[] = "<a href='".route("admin.role.index")."'>";
+                $html[] = "<span class='am-icon-save'></span> 用户组管理";
+                $html[] = "</a>";
+                $html[] = "</li>";
+            }
+
+            if (Auth::guard('admin')->user()->can("admin.permission.index")) {
+                $active = "admin.permission.index" == $curRoute ? " am-active" : "";
+                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
+                $html[] = "<a href='".route("admin.permission.index")."'>";
+                $html[] = "<span class='am-icon-check-square-o'></span> 权限查看";
+                $html[] = "</a>";
+                $html[] = "</li>";
+            }
+
+            if (Auth::guard('admin')->user()->can("admin.permission.index")) {
+                $active = "admin.config.index" == $curRoute ? " am-active" : "";
+                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
+                $html[] = "<a href='".route("admin.permission.index")."'>";
+                $html[] = "<span class='am-icon-wrench'></span> 系统配置";
+                $html[] = "</a>";
+                $html[] = "</li>";
+            }
+        }
+
+        $html[] = "</ul>";
+        $html[] = "</li>";
+        $html[] = "</ul>";
+
+        $html[] = "<div class='background-color: #f3f3f3'>&nbsp;";
+        $html[] = "</div>";
+
+        $html[] = "</div>";
+        $html[] = "</div>";
+
+        return join("", $html);
+    }
 }

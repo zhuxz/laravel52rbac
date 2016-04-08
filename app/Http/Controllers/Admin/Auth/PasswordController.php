@@ -22,7 +22,7 @@ class PasswordController extends Controller
 
     protected $guard = 'admin';
 
-    protected $broker = 'admin_users';
+    protected $broker = 'users';
 
     /**
      * Create a new password controller instance.

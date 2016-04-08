@@ -15,7 +15,7 @@ class BaseController extends Controller
         $this->middleware('auth.admin');
 
         Breadcrumbs::register('dashboard', function ($breadcrumbs) {
-            $breadcrumbs->push('Dashboard', route('admin.home'));
+            $breadcrumbs->push('系统管理', route('admin.user.index'));
         });
     }
 }

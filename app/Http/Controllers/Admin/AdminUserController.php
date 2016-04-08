@@ -7,7 +7,11 @@ use App\Http\Requests;
 use App\Repositories\AdminUserRepositoryEloquent;
 use App\Http\Requests\Admin\AdminUser\CreateRequest;
 use App\Http\Requests\Admin\AdminUser\UpdateRequest;
+use App\libs\SysHelper;
+
 use Breadcrumbs, Toastr;
+
+//require app_path().'/lib/SysHelper.php';
 
 class AdminUserController extends BaseController
 {
@@ -20,11 +24,13 @@ class AdminUserController extends BaseController
         parent::__construct();
         $this->adminUser = $adminUser;
 
+        Toastr::clear();
+
         Breadcrumbs::setView('admin._partials.breadcrumbs');
 
         Breadcrumbs::register('admin-user', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push('用户管理', route('admin.admin_user.index'));
+            $breadcrumbs->push('用户管理', route('admin.user.index'));
         });
 
     }
@@ -34,15 +40,20 @@ class AdminUserController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         Breadcrumbs::register('admin-user-index', function ($breadcrumbs) {
             $breadcrumbs->parent('admin-user');
-            $breadcrumbs->push('用户列表', route('admin.admin_user.index'));
+            $breadcrumbs->push('用户列表', route('admin.user.index'));
         });
 
-        $users = $this->adminUser->paginate(10);
-        return view('admin.rbac.admin_users.index', compact('users'));
+        if ($request->ajax()) {
+            return $this->all();
+        } else {
+            //$users = $this->adminUser->paginate(10);
+            $users = $this->adminUser->all();
+            return view('admin.rbac.admin_users.index', compact('users'));
+        }
     }
 
     /**
@@ -50,13 +61,18 @@ class AdminUserController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         Breadcrumbs::register('admin-user-create', function ($breadcrumbs) {
             $breadcrumbs->parent('admin-user');
-            $breadcrumbs->push('添加用户', route('admin.admin_user.create'));
+            $breadcrumbs->push('添加用户', route('admin.user.create'));
         });
-        return view('admin.rbac.admin_users.create');
+
+        if ($request->ajax()) {
+            return SysHelper::getUserInfo($request);
+        } else {
+            return view('admin.rbac.admin_users.create');
+        }
     }
 
     /**
@@ -67,13 +83,14 @@ class AdminUserController extends BaseController
      */
     public function store(CreateRequest $request)
     {
+//        $req = CreateRequest::createFromBase($request);
         $result = $this->adminUser->store($request->all());
         if(!$result) {
             Toastr::error('新用户添加失败!');
-            return redirect(route('admin.admin_user.create'));
+            return redirect(route('admin.user.create'));
         }
         Toastr::success('新用户添加成功!');
-        return redirect('admin/admin_user');
+        return redirect('admin/user');
     }
 
     /**
@@ -97,7 +114,7 @@ class AdminUserController extends BaseController
     {
         Breadcrumbs::register('admin-user-edit', function ($breadcrumbs) use ($id) {
             $breadcrumbs->parent('admin-user');
-            $breadcrumbs->push('编辑用户', route('admin.admin_user.edit', ['id' => $id]));
+            $breadcrumbs->push('编辑用户', route('admin.user.edit', ['id' => $id]));
         });
 
         $user = $this->adminUser->find($id);
@@ -120,7 +137,7 @@ class AdminUserController extends BaseController
         } else {
             Toastr::success('用户更新成功');
         }
-        return redirect(route('admin.admin_user.edit', ['id' => $id]));
+        return redirect(route('admin.user.edit', ['id' => $id]));
     }
 
     /**
@@ -150,5 +167,15 @@ class AdminUserController extends BaseController
             $result = $this->adminUser->delete($id);
         }
         return response()->json($result ? ['status' => 1] : ['status' => 0]);
+    }
+
+    public function getUsers ($option = [])
+    {
+        return $this->adminUser->all();
+    }
+
+    public function all ()
+    {
+        return $this->adminUser->all();
     }
 }

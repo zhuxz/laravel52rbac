@@ -39,7 +39,8 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/TestCase.php"
+            "tests/TestCase.php",
+            "app/libs/SysHelper.php"
         ]
     },
     "scripts": {

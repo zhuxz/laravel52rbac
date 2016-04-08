@@ -1,123 +1,83 @@
 @extends('layouts.admin-app')
 
-@section('content')
+@section('title', '用户管理')
 
-    <div class="pageheader">
-        <h2><i class="fa fa-home"></i> Dashboard <span>系统设置</span></h2>
+@section('description', '用户管理')
+
+@section('css')
+    <link rel="stylesheet" href="../refer/zTree/zTreeStyle/zTreeStyle.css">
+@endsection
+
+@section('include-search')
+    <div class="am-cf am-padding">
         {!! Breadcrumbs::render('admin-user-index') !!}
-    </div>
-
-    <div class="contentpanel panel-email">
-
-        <div class="row">
-
-            @include('admin._partials.rbac-left-menu')
-
-            <div class="col-sm-9 col-lg-10">
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
-
-                        <div class="pull-right">
-                            <div class="btn-group mr10">
-                                <a href="{{ route('admin.admin_user.create') }}" class="btn btn-white tooltips"
-                                   data-toggle="tooltip" data-original-title="新增"><i
-                                            class="glyphicon glyphicon-plus"></i></a>
-                                <a class="btn btn-white tooltips deleteall" data-toggle="tooltip"
-                                   data-original-title="删除" data-href="{{ route('admin.admin_user.destory.all') }}"><i
-                                            class="glyphicon glyphicon-trash"></i></a>
-                            </div>
-                        </div><!-- pull-right -->
-
-                        <h5 class="subtitle mb5">用户列表</h5>
-
-                        @include('admin._partials.show-page-status',['result'=>$users])
-
-                        <div class="table-responsive col-md-12">
-                            <table class="table mb30">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <span class="ckbox ckbox-primary">
-                                            <input type="checkbox" id="selectall"/>
-                                            <label for="selectall"></label>
-                                        </span>
-                                    </th>
-                                    <th>用户名</th>
-                                    <th>邮箱</th>
-                                    <th>超级管理员</th>
-                                    <th>所属角色</th>
-                                    <th>创建时间</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($users as $user)
-                                    <tr>
-                                        <td>
-                                            <div class="ckbox ckbox-default">
-                                                <input type="checkbox" name="id" id="id-{{ $user->id }}"
-                                                       value="{{ $user->id }}" class="selectall-item"/>
-                                                <label for="id-{{ $user->id }}"></label>
-                                            </div>
-                                        </td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{!! $user->is_super ? '<span class="label label-danger">是</span>':'<span class="label label-default">否</span>' !!}</td>
-                                        <td>
-                                            @if($user->roles()->count())
-                                                @foreach($user->roles()->get() as $role)
-                                                    <span class="badge badge-info">{{ $role->display_name }}</span>
-                                                @endforeach
-                                            @else
-                                                <span class="badge">无</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $user->created_at }}</td>
-                                        <td>
-                                            <a href="{{ route('admin.admin_user.edit',['id'=>$user->id]) }}"
-                                               class="btn btn-white btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
-                                            <a class="btn btn-danger btn-xs user-delete"
-                                               data-href="{{ route('admin.admin_user.destroy',['id'=>$user->id]) }}">
-                                                <i class="fa fa-trash-o"></i> 删除</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {!! $users->render() !!}
-
-                    </div><!-- panel-body -->
-                </div><!-- panel -->
-
-            </div><!-- col-sm-9 -->
-
-        </div><!-- row -->
-
     </div>
 @endsection
 
-@section('javascript')
-    @parent
-    <script src="{{ asset('js/ajax.js') }}"></script>
-    <script type="text/javascript">
-        $(".user-delete").click(function () {
-            Rbac.ajax.delete({
-                confirmTitle: '确定删除用户?',
-                href: $(this).data('href'),
-                successTitle: '用户删除成功'
-            });
-        });
+@section('include-content')
+    <div class="am-g">
+        <div class="am-u-lg-12 am-scrollable-horizontal" id="divContainer">
+            <table id='tblList' width='100%' table-layout='fixed' class='am-table am-table-striped am-text-nowrap zj-table'>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>机构/部门名称</th>
+                        <th>账号名称</th>
+                        <th>真实名称</th>
+                        <th>管理员</th>
+                        <th>联系方式</th>
+                        <th>用户组</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($users as $user)
+                    <tr>
+                        <td>{{ $user->id }}</td>
+                        <td>{{ $user->organization() }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->real_name }}</td>
+                        <td>{!! $user->is_super ? '<span class="am-badge am-badge-danger am-radius">是</span>':'<span class="am-badge am-radius">否</span>' !!}</td>
+                        <td>{{ $user->mobile }}</td>
+                        <td>
+                            @if($user->roles()->count())
+                                @foreach($user->roles()->get() as $role)
+                                    <span class="am-badge am-badge-secondary am-radius">{{ $role->display_name }}</span>
+                                @endforeach
+                            @else
+                                <span class="am-badge am-radius">无</span>
+                            @endif
+                        </td>
+                        <td>
+                            <a title="编辑" class="am-btn" href="{{ route('admin.user.edit',['id'=>$user->id]) }}">
+                                <i class="am-icon-pencil-square-o"></i>
+                            </a>
+                            <a title="删除" class="am-btn" href="{{ route('admin.user.destroy',['id'=>$user->id]) }}">
+                                <i class="am-icon-trash-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        $(".deleteall").click(function () {
-            Rbac.ajax.deleteAll({
-                confirmTitle: '确定删除选中的用户?',
-                href: $(this).data('href'),
-                successTitle: '用户删除成功'
-            });
-        });
-    </script>
+    </div>
 
+    <p style="text-align: center;">
+        <a href="{{ route('admin.user.create') }}">
+            <img src="../assets/images/add_account.png" alt="">
+        </a>
+    </p>
+
+    <div id="menuContent" class="menuContent" style="display:none; position: absolute; z-index: 1120">
+        <ul id="menuTree" class="ztree" style="margin-top:0; padding: 0.5em;height: 300px;background: #f0f6e4;border: 1px solid #617775;overflow:scroll;"></ul>
+    </div>
+@endsection
+
+@section('include-js')
+    <script src="../refer/zTree/jquery.ztree.all-3.5.min.js"></script>
+    <script src="../inc/ztree.js"></script>
+    <script src="../inc/management.js"></script>
+    <script src="../js/management_account.js"></script>
 @endsection

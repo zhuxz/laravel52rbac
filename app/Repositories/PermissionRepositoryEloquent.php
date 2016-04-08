@@ -90,13 +90,16 @@ class PermissionRepositoryEloquent extends BaseRepository implements PermissionR
      * Permission Menus
      * @return array
      */
-    public function menus()
+    public function menus($isAdmin = 0)
     {
         $menus = [];
-        $father = $this->model->where('fid', 0)->where('is_menu', 1)->orderBy('sort', 'asc')->orderBy('id', 'asc')->get()->toArray();
+        $father = $this->model->where('fid', 0)
+            ->where('is_menu', 1)
+            ->where('is_admin', $isAdmin)
+            ->orderBy('sort', 'asc')
+            ->orderBy('id', 'asc')->get()->toArray();
         if($father) {
             foreach ($father as $item) {
-
                 if($item['sub_permission']) {
                     foreach ($item['sub_permission'] as $key => $sub) {
                         if($sub['is_menu']) {

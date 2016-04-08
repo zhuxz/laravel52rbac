@@ -1,113 +1,70 @@
 @extends('layouts.admin-app')
 
-@section('content')
-    <div class="pageheader">
-        <h2><i class="fa fa-home"></i> Dashboard <span>系统设置</span></h2>
+@section('title', '用户组管理')
+
+@section('description', '用户组管理')
+
+@section('css')
+    <link rel="stylesheet" href="../refer/zTree/zTreeStyle/zTreeStyle.css">
+@endsection
+
+@section('include-search')
+    <div class="am-cf am-padding">
         {!! Breadcrumbs::render('admin-role-index') !!}
-    </div>
-
-    <div class="contentpanel panel-email">
-
-        <div class="row">
-
-            @include('admin._partials.rbac-left-menu')
-
-            <div class="col-sm-9 col-lg-10">
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
-
-                        <div class="pull-right">
-                            <div class="btn-group mr10">
-                                <a href="{{ route('admin.role.create') }}" class="btn btn-white tooltips"
-                                   data-toggle="tooltip" data-original-title="新增"><i
-                                            class="glyphicon glyphicon-plus"></i></a>
-                                <a class="btn btn-white tooltips deleteall" data-toggle="tooltip"
-                                   data-original-title="删除" data-href="{{ route('admin.role.destory.all') }}"><i
-                                            class="glyphicon glyphicon-trash"></i></a>
-                            </div>
-                        </div><!-- pull-right -->
-
-                        <h5 class="subtitle mb5">角色列表</h5>
-                        @include('admin._partials.show-page-status',['result'=>$roles])
-
-                        <div class="table-responsive col-md-12">
-                            <table class="table mb30">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <span class="ckbox ckbox-primary">
-                                            <input type="checkbox" id="selectall"/>
-                                            <label for="selectall"></label>
-                                        </span>
-                                    </th>
-                                    <th>标识</th>
-                                    <th>角色名</th>
-                                    <th>说明</th>
-                                    <th>创建时间</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($roles as $role)
-                                    <tr>
-                                        <td>
-                                            <div class="ckbox ckbox-default">
-                                                <input type="checkbox" name="id" id="id-{{ $role->id }}"
-                                                       value="{{ $role->id }}" class="selectall-item"/>
-                                                <label for="id-{{ $role->id }}"></label>
-                                            </div>
-                                        </td>
-                                        <td>{{ $role->name }}</td>
-                                        <td>{{ $role->display_name }}</td>
-                                        <td>{{ $role->description }}</td>
-                                        <td>{{ $role->created_at }}</td>
-                                        <td>
-                                            <a href="{{ route('admin.role.edit',['id'=>$role->id]) }}"
-                                               class="btn btn-white btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
-                                            <a href="{{ route('admin.role.permissions',['id'=>$role->id]) }}"
-                                            class="btn btn-info btn-xs role-permissions"><i class="fa fa-wrench"></i> 权限</a>
-                                            <a class="btn btn-danger btn-xs role-delete"
-                                               data-href="{{ route('admin.role.destroy',['id'=>$role->id]) }}">
-                                                <i class="fa fa-trash-o"></i> 删除</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {!! $roles->render() !!}
-
-                    </div><!-- panel-body -->
-                </div><!-- panel -->
-
-            </div><!-- col-sm-9 -->
-
-        </div><!-- row -->
-
     </div>
 @endsection
 
-@section('javascript')
-    @parent
-    <script src="{{ asset('js/ajax.js') }}"></script>
-    <script type="text/javascript">
-        $(".role-delete").click(function () {
-            Rbac.ajax.delete({
-                confirmTitle: '确定删除角色?',
-                href: $(this).data('href'),
-                successTitle: '角色删除成功'
-            });
-        });
+@section('include-content')
+    <div class="am-g">
+        <div class="am-u-lg-12 am-scrollable-horizontal" id="divContainer">
+            <table id='tblList' width='100%' table-layout='fixed' class='am-table am-table-striped am-text-nowrap zj-table'>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>标识</th>
+                    <th>用户组名称</th>
+                    <th>说明</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($roles as $role)
+                    <tr>
+                        <td>{{ $role->id }}</td>
+                        <td>{{ $role->name }}</td>
+                        <td>{{ $role->display_name }}</td>
+                        <td>{{ $role->description }}</td>
+                        <td>{{ $role->created_at }}</td>
+                        <td>
+                            <a title="编辑" class="am-btn" href="{{ route('admin.role.edit',['id'=>$role->id]) }}">
+                                <i class="am-icon-pencil-square-o"></i>
+                            </a>
+                            <a title="权限" class="am-btn" href="{{ route('admin.role.permissions',['id'=>$role->id]) }}">
+                                <i class="am-icon-wrench"></i>
+                            </a>
+                            <a title="删除" class="am-btn" href="{{ route('admin.role.destroy',['id'=>$role->id]) }}">
+                                <i class="am-icon-trash-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        $(".deleteall").click(function () {
-            Rbac.ajax.deleteAll({
-                confirmTitle: '确定删除选中的角色?',
-                href: $(this).data('href'),
-                successTitle: '角色删除成功'
-            });
-        });
-    </script>
+    </div>
 
+    <p style="text-align: center;">
+        <a href="javascript:void(0)" btnadd>
+            <img src="../assets/images/add_account.png" alt="">
+        </a>
+    </p>
+@endsection
+
+@section('include-js')
+    <script src="../refer/zTree/jquery.ztree.all-3.5.min.js"></script>
+    <script src="../inc/ztree.js"></script>
+    <script src="../inc/management.js"></script>
+    <script src="../js/management_account.js"></script>
 @endsection

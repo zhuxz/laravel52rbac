@@ -24,6 +24,8 @@ class HomeController extends BaseController
      */
     public function index(Request $request)
     {
-        return view('admin.home');
+        return redirect()->action('Admin\AdminUserController@index', [$request]);
+//        redirect("admin.user.index");
+//        return view('admin.rbac.admin_users.index');
     }
 }

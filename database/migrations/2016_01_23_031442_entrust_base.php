@@ -20,6 +20,19 @@ class EntrustBase extends Migration
             $table->timestamps();
         });
 
+        // Create table for associating roles to users (Many-to-Many)
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned();
+            $table->integer('role_id')->unsigned();
+
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')
+                ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->primary(['user_id', 'role_id']);
+        });
+
         // Create table for storing permissions
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
@@ -29,6 +42,7 @@ class EntrustBase extends Migration
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
             $table->tinyInteger('is_menu')->default(0)->comment('是否作为菜单显示,[1|0]');
+            $table->tinyInteger('is_admin')->default(0)->comment('是否是后台管理权限,[1|0]');
             $table->tinyInteger('sort')->default(0)->comment('排序');
             $table->timestamps();
         });
@@ -56,6 +70,7 @@ class EntrustBase extends Migration
     {
         Schema::dropIfExists('permission_role');
         Schema::dropIfExists('permissions');
+        Schema::dropIfExists('role_user');
         Schema::dropIfExists('roles');
     }
 }

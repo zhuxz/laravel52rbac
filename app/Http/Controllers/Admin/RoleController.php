@@ -41,7 +41,7 @@ class RoleController extends BaseController
             $breadcrumbs->push('角色列表', route('admin.role.index'));
         });
 
-        $roles = $this->role->paginate(10);
+        $roles = $this->role->all();
         return view('admin.rbac.roles.index', compact('roles'));
     }
 

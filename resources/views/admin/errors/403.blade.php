@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/png">
 
     <title>403</title>
@@ -42,8 +43,7 @@
             <small class="text-muted">对不起，你没有权限操作这个页面</small>
         </div>
         <form method="post" action="#">
-            <a href="{{ route('admin.home') }}" class="btn btn-success btn-block">首页</a>
-
+{{--            <a href="{{ route('admin.user') }}" class="btn btn-success btn-block">首页</a>--}}
             <a href="{{ $previousUrl }}" class="btn btn-success btn-block">点击返回</a>
         </form>
     </div><!-- lockedpanel -->

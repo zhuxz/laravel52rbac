@@ -12,13 +12,13 @@ class EntrustPivotAdminUserRole extends Migration
     public function up()
     {
         // Create table for associating roles to users (Many-to-Many)
-        Schema::create('admin_user_role', function (Blueprint $table) {
-            $table->integer('admin_user_id')->unsigned();
-            $table->foreign('admin_user_id')->references('id')->on('admin_users')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('role_id')->unsigned();
-            $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
-            $table->primary(['admin_user_id', 'role_id']);
-        });
+//        Schema::create('admin_user_role', function (Blueprint $table) {
+//            $table->integer('admin_user_id')->unsigned();
+//            $table->foreign('admin_user_id')->references('id')->on('admin_users')->onUpdate('cascade')->onDelete('cascade');
+//            $table->integer('role_id')->unsigned();
+//            $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
+//            $table->primary(['admin_user_id', 'role_id']);
+//        });
     }
 
     /**

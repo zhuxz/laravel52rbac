@@ -5,7 +5,7 @@ namespace App\Repositories;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\AdminUserRepository;
-use App\Models\AdminUser;
+use App\Models\User;
 
 /**
  * Class AdminUserRepositoryEloquent
@@ -20,7 +20,7 @@ class AdminUserRepositoryEloquent extends BaseRepository implements AdminUserRep
      */
     public function model()
     {
-        return AdminUser::class;
+        return User::class;
     }
 
     /**
@@ -41,6 +41,7 @@ class AdminUserRepositoryEloquent extends BaseRepository implements AdminUserRep
         $id = $this->model->insertGetId([
             'name' => $payload['name'],
             'email' => $payload['email'],
+            'organization_id' => $payload['organization_id'],
             'password' => bcrypt($payload['password']),
             'is_super' => $payload['is_super']
         ]);

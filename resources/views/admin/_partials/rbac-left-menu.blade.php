@@ -3,7 +3,7 @@
 <div class="col-sm-3 col-lg-2">
     <ul class="nav nav-pills nav-stacked nav-email">
         <li class="{{ $appPresenter->activeMenuByRoute('admin_user') }}">
-            <a href="{{ route('admin.admin_user.index') }}">
+            <a href="{{ route('admin.user.index') }}">
                 <span class="badge pull-right"></span>
                 <i class="fa fa-user"></i> 用户管理
             </a>

@@ -1,52 +1,34 @@
-@extends('layouts.admin-login')
+@extends('layouts.auth-admin')
 
 @section('content')
-    <div class="row">
+    <div class="am-g">
+        <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+            <h3>登录</h3>
+            <hr>
 
-        <div class="col-md-7">
-
-            <div class="signin-info">
-                <div class="logopanel">
-                    <h1><span>[</span> Rbac <span>]</span></h1>
-                </div><!-- logopanel -->
-
-                <div class="mb20"></div>
-
-                <h5><strong>Welcome to Bracket Bootstrap 3 Template!</strong></h5>
-                <ul>
-                    <li><i class="fa fa-arrow-circle-o-right mr5"></i> Fully Responsive Layout</li>
-                    <li><i class="fa fa-arrow-circle-o-right mr5"></i> HTML5/CSS3 Valid</li>
-                    <li><i class="fa fa-arrow-circle-o-right mr5"></i> Retina Ready</li>
-                    <li><i class="fa fa-arrow-circle-o-right mr5"></i> WYSIWYG CKEditor</li>
-                    <li><i class="fa fa-arrow-circle-o-right mr5"></i> and much more...</li>
-                </ul>
-                <div class="mb20"></div>
-                <strong>Not a member? <a href="signup.html">Sign Up</a></strong>
-            </div><!-- signin0-info -->
-
-        </div><!-- col-sm-7 -->
-
-        <div class="col-md-5">
-            <form method="post" action="{{ url('/admin/login') }}">
-                @if($errors->first())
-                    <div class="alert alert-danger">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <strong>{{ $errors->first() }}!</strong>
-                    </div>
-                @endif
-                <h4 class="nomargin">登陆</h4>
-                <input type="text" name="email" class="form-control uname" placeholder="邮箱"/>
-                <input type="password" name="password" class="form-control pword" placeholder="密码"/>
-                <div class="checkbox">
-                    <input type="checkbox" name="remember"> 记住我
+            <form method="post" class="am-form" role="form" action="{{ url('/admin/login') }}">
+                {!! csrf_field() !!}
+                <div class="am-form-group{{ $errors->has('email') ? ' am-form-error' : '' }}">
+                    <label for="user-name">邮箱：</label>
+                    <input type="text" required="" placeholder="输入用户名" id="email" name="email" />
+                    @if ($errors->has('email'))
+                        <div class="am-alert am-alert-danger">{{ $errors->first('email') }}</div>
+                    @endif
                 </div>
-                <a href="#">
-                    <small>忘记密码?</small>
-                </a>
-                <input type="hidden" class="form-control" name="_token" value="{{ csrf_token() }}">
-                <button type="submit" class="btn btn-success btn-block">登陆</button>
+                <div class="am-form-group{{ $errors->has('password') ? ' am-form-error' : '' }}">
+                    <label for="password">密码:</label>
+                    <input type="password" name="password" id="password" value="" />
+                    @if ($errors->has('password'))
+                        <div class="am-alert am-alert-danger">{{ $errors->first('password') }}</div>
+                    @endif
+                </div>
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="remember" /> 记住密码
+                    </label>
+                </div>
+                <button type="submit" class="am-btn am-btn-primary am-btn-sm am-fl">登 录</button>
             </form>
-        </div><!-- col-sm-5 -->
-
-    </div><!-- row -->
+        </div>
+    </div>
 @endsection

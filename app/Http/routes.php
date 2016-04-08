@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
 /*
 |--------------------------------------------------------------------------
@@ -29,32 +29,51 @@ Route::get('/', function () {
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
+    Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
 });
 
+//Route::get('/admin', Route::get('/', 'Admin\HomeController@index'));
+//Route::get('/admin', 'Admin\AdminUserController@index');
+//Route::get('/admin', function () {
+////    return view('admin.welcome');
+//    Route::get('/admin', 'Admin\AdminUserController@index');
+//});
 
 Route::group(['middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admin'], function () {
     Route::auth();
 
-    Route::get('/home', ['as' => 'admin.home', 'uses' => 'HomeController@index']);
-    Route::resource('admin_user', 'AdminUserController');
+    Route::get('/', function () {
+        return redirect()->route('admin.user.index');
+    });
+    //Route::get('/home', ['as' => 'admin.home', 'uses' => 'HomeController@index']);
+
+    Route::get('/user/all', 'AdminUserController@all');
+    //Route::get('/user/index', 'AdminUserController@index');
+    Route::resource('user', 'AdminUserController');
     Route::delete('admin/admin_user/destoryall',['as'=>'admin.admin_user.destory.all','uses'=>'AdminUserController@destoryAll']);
+
     Route::resource('role', 'RoleController');
     Route::delete('admin/role/destoryall',['as'=>'admin.role.destory.all','uses'=>'RoleController@destoryAll']);
     Route::get('role/{id}/permissions',['as'=>'admin.role.permissions','uses'=>'RoleController@permissions']);
     Route::post('role/{id}/permissions',['as'=>'admin.role.permissions','uses'=>'RoleController@storePermissions']);
+
     Route::resource('permission', 'PermissionController');
     Route::delete('admin/permission/destoryall',['as'=>'admin.permission.destory.all','uses'=>'PermissionController@destoryAll']);
-    Route::resource('blog', 'BlogController');
+
+    Route::resource('parameter', 'ParameterController');
+
+    Route::get('/user/all', 'AdminUserController@all');
 });
 
 
-Route::get('/admin', function () {
-    return view('admin.welcome');
+
+Route::get('/error', function () {
+    return view('admin.errors.403');
 });
 
-Route::group(['middleware' => 'web'], function () {
-    Route::auth();
-
-    Route::get('/home', 'HomeController@index');
-});
+//Route::group(['middleware' => 'web'], function () {
+//    Route::auth();
+//
+//    Route::get('/home', 'HomeController@index');
+//});

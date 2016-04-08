@@ -1,66 +1,34 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                        {!! csrf_field() !!}
+    <div class="am-g">
+        <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+            <h3>登录</h3>
+            <hr>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember"> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i>Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
-                            </div>
-                        </div>
-                    </form>
+            <form method="post" class="am-form" role="form" action="{{ url('/login') }}">
+                {!! csrf_field() !!}
+                <div class="am-form-group{{ $errors->has('email') ? ' am-form-error' : '' }}">
+                    <label for="user-name">邮箱：</label>
+                    <input type="text" required="" placeholder="输入用户名" id="email" name="email" />
+                    @if ($errors->has('email'))
+                        <div class="am-alert am-alert-danger">{{ $errors->first('email') }}</div>
+                    @endif
                 </div>
-            </div>
+                <div class="am-form-group{{ $errors->has('password') ? ' am-form-error' : '' }}">
+                    <label for="password">密码:</label>
+                    <input type="password" name="password" id="password" value="" />
+                    @if ($errors->has('password'))
+                        <div class="am-alert am-alert-danger">{{ $errors->first('password') }}</div>
+                    @endif
+                </div>
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="remember" /> 记住密码
+                    </label>
+                </div>
+                <button type="submit" class="am-btn am-btn-primary am-btn-sm am-fl">登 录</button>
+            </form>
         </div>
     </div>
-</div>
 @endsection

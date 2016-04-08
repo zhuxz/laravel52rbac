@@ -23,7 +23,7 @@
                         <h4 class="panel-title">编辑用户</h4>
                     </div>
 
-                    <form class="form-horizontal form-bordered" action="{{ route('admin.admin_user.update',['id'=>$user->id]) }}" method="POST">
+                    <form class="form-horizontal form-bordered" action="{{ route('admin.user.update',['id'=>$user->id]) }}" method="POST">
 
                         <div class="panel-body panel-body-nopadding">
                             <div class="form-group">
