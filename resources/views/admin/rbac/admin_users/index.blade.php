@@ -52,9 +52,11 @@
                             <a title="编辑" class="am-btn" href="{{ route('admin.user.edit',['id'=>$user->id]) }}">
                                 <i class="am-icon-pencil-square-o"></i>
                             </a>
-                            <a title="删除" class="am-btn" href="{{ route('admin.user.destroy',['id'=>$user->id]) }}">
+                            @if ($user->id > 1)
+                            <a title="删除" class="am-btn" href="javascript:void(0);" url="{{ route('admin.user.destroy',['id'=>$user->id]) }}" btndel>
                                 <i class="am-icon-trash-o"></i>
                             </a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -70,14 +72,28 @@
         </a>
     </p>
 
-    <div id="menuContent" class="menuContent" style="display:none; position: absolute; z-index: 1120">
-        <ul id="menuTree" class="ztree" style="margin-top:0; padding: 0.5em;height: 300px;background: #f0f6e4;border: 1px solid #617775;overflow:scroll;"></ul>
+    <!--删除模态框开始-->
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="mdlDel">
+        <div class="am-modal-dialog">
+            <!--<div class="am-modal-hd">Amaze UI</div>-->
+            <div class="am-modal-bd">
+                <input type="hidden" name="id" value="">
+                确定要删除这条记录吗？
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+            </div>
+        </div>
     </div>
+    <!--删除模态框结束-->
 @endsection
 
 @section('include-js')
     <script src="../refer/zTree/jquery.ztree.all-3.5.min.js"></script>
     <script src="../inc/ztree.js"></script>
     <script src="../inc/management.js"></script>
-    <script src="../js/management_account.js"></script>
+    <script src="../inc/admin/admin.js"></script>
+    <script src="../inc/admin/user/user.js"></script>
+    <script src="../inc/admin/user/index.js"></script>
 @endsection

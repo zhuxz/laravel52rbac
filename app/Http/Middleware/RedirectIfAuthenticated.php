@@ -19,7 +19,7 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             if($guard == 'admin') {
-                return redirect('/admin/home');
+                return redirect('/admin/user');
             }
             return redirect('/home');
         }

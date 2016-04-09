@@ -191,75 +191,18 @@ class PermissionPresenter extends FractalPresenter
 	                $menuItems[] = "</li>";
                 }
             }
-            $menuItems[] = "</ul>";
-            $menuItems[] = "</div>";
-            $menuItems[] = "</div>";
         }
+
+        $menuItems[] = "<li class='am-panel am-panel-zj'> ";
+        $menuItems[] = "<a class='am-cf' href='".url('admin/logout')."'>";
+        $menuItems[] = "<span class='am-icon-sign-out'></span>";
+        $menuItems[] = " 退出";
+        $menuItems[] = "</a>";
+        $menuItems[] = "</li>";
+        $menuItems[] = "</ul>";
+        $menuItems[] = "</div>";
+        $menuItems[] = "</div>";
 
         return join("", $menuItems);
-
-
-        $curRoute = Route::currentRouteName();
-
-        if (Auth::guard('admin')->user()->is_super) {
-            if (Auth::guard('admin')->user()->can("admin.user.index")
-                || Auth::guard('admin')->user()->can("admin.user.create")
-                || Auth::guard('admin')->user()->can("admin.user.edit")
-                || Auth::guard('admin')->user()->can("admin.user.update")
-                || Auth::guard('admin')->user()->can("admin.user.destroy")) {
-                if ($curRoute == "admin.user.index"
-                    ||$curRoute == "admin.user.create"
-                    ||$curRoute == "admin.user.edit"
-                    ||$curRoute == "admin.user.update"
-                    ||$curRoute == "admin.user.destroy") {
-
-                }
-                $active = "admin.user.index" == $curRoute ? " am-active" : "";
-                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
-                $html[] = "<a href='".route("admin.user.index")."'>";
-                $html[] = "<span class='am-icon-tasks'></span> 用户管理";
-                $html[] = "</a>";
-                $html[] = "</li>";
-            }
-
-            if (Auth::guard('admin')->user()->can("admin.role.index")) {
-                $active = "admin.role.index" == $curRoute ? " am-active" : "";
-                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
-                $html[] = "<a href='".route("admin.role.index")."'>";
-                $html[] = "<span class='am-icon-save'></span> 用户组管理";
-                $html[] = "</a>";
-                $html[] = "</li>";
-            }
-
-            if (Auth::guard('admin')->user()->can("admin.permission.index")) {
-                $active = "admin.permission.index" == $curRoute ? " am-active" : "";
-                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
-                $html[] = "<a href='".route("admin.permission.index")."'>";
-                $html[] = "<span class='am-icon-check-square-o'></span> 权限查看";
-                $html[] = "</a>";
-                $html[] = "</li>";
-            }
-
-            if (Auth::guard('admin')->user()->can("admin.permission.index")) {
-                $active = "admin.config.index" == $curRoute ? " am-active" : "";
-                $html[] = "<li class='am-panel am-panel-zj".$active."'>";
-                $html[] = "<a href='".route("admin.permission.index")."'>";
-                $html[] = "<span class='am-icon-wrench'></span> 系统配置";
-                $html[] = "</a>";
-                $html[] = "</li>";
-            }
-        }
-
-        $html[] = "</ul>";
-        $html[] = "</li>";
-        $html[] = "</ul>";
-
-        $html[] = "<div class='background-color: #f3f3f3'>&nbsp;";
-        $html[] = "</div>";
-
-        $html[] = "</div>";
-        $html[] = "</div>";
-
-        return join("", $html);
     }
 }

@@ -18,11 +18,13 @@ class AuthenticateAdmin
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        //info("Admin.AuthenticateAdmin.begin");
         if(Auth::guard('admin')->user()->is_super){
             return $next($request);
         }
 
         $previousUrl = URL::previous();
+        //info("previousUrl=".$previousUrl);
         if(!Auth::guard('admin')->user()->can(Route::currentRouteName())) {
             if($request->ajax() && ($request->getMethod() != 'GET')) {
                 return response()->json([
@@ -31,9 +33,17 @@ class AuthenticateAdmin
                     'msg' => '您没有权限执行此操作'
                 ]);
             } else {
-                return view('admin.errors.403', compact('previousUrl'));
+                if (URL::to("admin/login") == $previousUrl) {
+                    $previousUrl = URL::to("admin/logout");
+                    return view('admin.errors.403', compact('previousUrl'));
+                } else {
+                    return view('admin.errors.403', compact('previousUrl'));
+                }
+                //return view('admin.errors.403', compact('previousUrl'));
             }
         }
+
+        //info("Admin.AuthenticateAdmin.finish");
 
         return $next($request);
     }

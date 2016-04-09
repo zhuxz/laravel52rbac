@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+    <link rel="icon" type="image/png" href="{{ asset('assets/i/favicon.png') }}">
 
     <title>Bracket Responsive Bootstrap3 Admin</title>
 

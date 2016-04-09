@@ -49,10 +49,11 @@ Route::group(['middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admi
     //Route::get('/home', ['as' => 'admin.home', 'uses' => 'HomeController@index']);
 
     Route::get('/user/all', 'AdminUserController@all');
-    //Route::get('/user/index', 'AdminUserController@index');
+    Route::post('/user/{id}', 'AdminUserController@update');
     Route::resource('user', 'AdminUserController');
     Route::delete('admin/admin_user/destoryall',['as'=>'admin.admin_user.destory.all','uses'=>'AdminUserController@destoryAll']);
 
+    Route::post('/role/{id}', 'RoleController@update');
     Route::resource('role', 'RoleController');
     Route::delete('admin/role/destoryall',['as'=>'admin.role.destory.all','uses'=>'RoleController@destoryAll']);
     Route::get('role/{id}/permissions',['as'=>'admin.role.permissions','uses'=>'RoleController@permissions']);
@@ -62,15 +63,13 @@ Route::group(['middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admi
     Route::delete('admin/permission/destoryall',['as'=>'admin.permission.destory.all','uses'=>'PermissionController@destoryAll']);
 
     Route::resource('parameter', 'ParameterController');
-
-    Route::get('/user/all', 'AdminUserController@all');
 });
 
 
 
-Route::get('/error', function () {
-    return view('admin.errors.403');
-});
+//Route::get('/error', function () {
+//    return view('admin.errors.403');
+//});
 
 //Route::group(['middleware' => 'web'], function () {
 //    Route::auth();

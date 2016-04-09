@@ -25,7 +25,7 @@ class RoleController extends BaseController
 
         Breadcrumbs::register('admin-role', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push('角色管理', route('admin.role.index'));
+            $breadcrumbs->push('用户组管理', route('admin.role.index'));
         });
     }
 
@@ -38,7 +38,7 @@ class RoleController extends BaseController
     {
         Breadcrumbs::register('admin-role-index', function ($breadcrumbs) {
             $breadcrumbs->parent('admin-role');
-            $breadcrumbs->push('角色列表', route('admin.role.index'));
+            $breadcrumbs->push('用户组列表', route('admin.role.index'));
         });
 
         $roles = $this->role->all();
@@ -54,7 +54,7 @@ class RoleController extends BaseController
     {
         Breadcrumbs::register('admin-role-create', function ($breadcrumbs) {
             $breadcrumbs->parent('admin-role');
-            $breadcrumbs->push('添加角色', route('admin.role.create'));
+            $breadcrumbs->push('添加用户组', route('admin.role.create'));
         });
 
         return view('admin.rbac.roles.create');
@@ -119,10 +119,12 @@ class RoleController extends BaseController
         $result = $this->role->update($request->all(), $id);
         if(!$result['status']) {
             Toastr::error($result['msg']);
+            return redirect(route('admin.role.edit', ['id' => $id]));
         } else {
             Toastr::success('角色更新成功');
+            return redirect(route('admin.role.index'));
         }
-        return redirect(route('admin.role.edit', ['id' => $id]));
+
     }
 
     /**
@@ -163,7 +165,7 @@ class RoleController extends BaseController
     {
         Breadcrumbs::register('admin-role-permission', function ($breadcrumbs) use ($id) {
             $breadcrumbs->parent('admin-role');
-            $breadcrumbs->push('编辑角色权限', route('admin.role.permissions', ['id' => $id]));
+            $breadcrumbs->push('编辑用户组', route('admin.role.permissions', ['id' => $id]));
         });
 
         $role = $this->role->find($id);
@@ -181,6 +183,12 @@ class RoleController extends BaseController
     public function storePermissions($id, Request $request)
     {
         $result = $this->role->savePermissions($id, $request->input('permissions', []));
-        return response()->json($result ? ['status' => 1] : ['status' => 0]);
+        //return response()->json($result ? ['status' => 1] : ['status' => 0]);
+        if($result) {
+            Toastr::success('用户组权限更新成功！');
+        } else {
+            Toastr::error($result['msg']);
+        }
+        return redirect(route('admin.role.permissions', ['id' => $id]));
     }
 }

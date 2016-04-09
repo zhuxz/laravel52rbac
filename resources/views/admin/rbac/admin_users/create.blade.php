@@ -37,14 +37,14 @@
                 <div class="am-form-group">
                     <label for="user-password" class="am-u-sm-3 am-form-label zj-label">密码 *</label>
                     <div class="am-u-sm-9">
-                        <input type="password" id="user-password" name="password" placeholder="密码 - 默认值：000000">
+                        <input type="password" id="user-password" name="password" placeholder="密码 - 默认值：000000" required>
                     </div>
                 </div>
 
                 <div class="am-form-group">
                     <label for="user-organization" class="am-u-sm-3 am-form-label zj-label">机构 *</label>
                     <div class="am-u-sm-9">
-                        <input type="text" id="user-organization" name="user-organization" value="{{ old('user-organization') }}" placeholder="机构" readonly>
+                        <input type="text" id="user-organization" name="user-organization" value="{{ old('user-organization') }}" placeholder="机构" readonly required>
                         <input type="hidden" id="organization_id" name="organization_id" value="{{ old('organization_id') }}">
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                 <div class="am-form-group">
                     <label for="user-real-name" class="am-u-sm-3 am-form-label zj-label">真实姓名 *</label>
                     <div class="am-u-sm-9">
-                        <input type="text" id="user-real-name" name="real_name" value="{{ old('real_name') }}" placeholder="真实姓名">
+                        <input type="text" id="user-real-name" name="real_name" value="{{ old('real_name') }}" placeholder="真实姓名" required>
                     </div>
                 </div>
 

@@ -18,7 +18,8 @@
         <link rel="stylesheet" href="{{ asset('/assets/css/amazeui.css') }}"/>
         <link rel="stylesheet" href="{{ asset('/assets/css/amazeui.datatables.css') }}"/>
         <link rel="stylesheet" href="{{ asset('/assets/css/admin.css') }}">
-        <link rel="stylesheet" href="../../{{Config::get('app.product')}}/zj.css">
+	    <link rel="stylesheet" href="{{ asset('').Config::get('app.product').'/zj.css' }}">
+        <!--<link rel="stylesheet" href="../../{{Config::get('app.product')}}/zj.css">-->
     @show
     @section('css')
     @show
@@ -45,8 +46,8 @@
                     <span class="am-icon-users"></span> {{ Auth::guard('admin')->user()->real_name }} <span class="am-icon-caret-down"></span>
                 </a>
                 <ul class="am-dropdown-content">
-                    <li><a href="user" target="_blank"><span class="am-icon-user"></span> 资料</a></li>
-                    <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
+                    <li><a href="{{ route('admin.user.edit',['id'=>Auth::guard('admin')->user()->id]) }}" target="_blank"><span class="am-icon-user"></span> 资料</a></li>
+                    {{--<li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>--}}
                     <li><a href="{{ url('admin/logout ') }}"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>

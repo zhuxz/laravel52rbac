@@ -1,92 +1,77 @@
 @extends('layouts.admin-app')
 
-@section('content')
-    <style>
-        .sub-permissions-ul li {
-            float: left;
+@section('title', '编辑用户组')
 
-        }
-    </style>
-    <div class="pageheader">
-        <h2><i class="fa fa-home"></i> Dashboard <span>系统设置</span></h2>
+@section('description', '编辑用户组')
+
+@section('css')
+    <link rel="stylesheet" href="{{asset('refer/zTree/zTreeStyle/zTreeStyle.css')}}">
+@endsection
+
+@section('include-search')
+    <div class="am-cf am-padding">
         {!! Breadcrumbs::render('admin-role-permission') !!}
     </div>
+@endsection
 
-    <div class="contentpanel">
-
-        <div class="row">
-
-            @include('admin._partials.rbac-left-menu')
-
-            <div class="col-sm-9 col-lg-10">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-btns">
-                            <a href="" class="panel-close">×</a>
-                            <a href="" class="minimize">−</a>
-                        </div>
-                        <h4 class="panel-title">编辑[{{ $role->display_name }}]权限</h4>
-                    </div>
-
-                    <form action="{{ route('admin.role.permissions',['id'=>$role->id]) }}" method="post"
-                          id="role-permissions-form">
-                        <div class="panel-body panel-body-nopadding">
-                            @foreach($permissions as $permission)
-                                <div class="top-permission col-md-12">
-                                    <a href="javascript:;" class="display-sub-permission-toggle">
-                                        <span class="glyphicon glyphicon-minus"></span>
-                                    </a>
-                                    @if(in_array($permission['id'],array_keys($rolePermissions)))
-                                        <input type="checkbox" name="permissions[]" value="{{ $permission['id'] }}"
-                                               class="top-permission-checkbox" checked/>
-                                    @else
-                                        <input type="checkbox" name="permissions[]" value="{{ $permission['id'] }}"
-                                               class="top-permission-checkbox"/>
-                                    @endif
-                                    <label><h5>&nbsp;&nbsp;{{ $permission['display_name'] }}</h5></label>
-                                </div>
-                                @if(count($permission['subPermission']))
-                                    <div class="sub-permissions col-md-11 col-md-offset-1">
-                                        @foreach($permission['subPermission'] as $sub)
-                                            <div class="col-sm-3">
-                                                @if($sub['is_menu'])
-                                                    <label><input type="checkbox" name="permissions[]"
-                                                                  value="{{ $sub['id'] }}"
-                                                                  class="sub-permission-checkbox" {{ in_array($sub['id'],array_keys($rolePermissions)) ? 'checked':'' }}/>&nbsp;&nbsp;<span
-                                                                class="fa fa-bars"></span>{{ $sub['display_name'] }}
-                                                    </label>
-                                                @else
-                                                    <label><input type="checkbox" name="permissions[]"
-                                                                  value="{{ $sub['id'] }}"
-                                                                  class="sub-permission-checkbox" {{ in_array($sub['id'],array_keys($rolePermissions)) ? 'checked':'' }}/>&nbsp;&nbsp;{{ $sub['display_name'] }}
-                                                    </label>
-                                                @endif
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-                            @endforeach
-                            {{ csrf_field() }}
-                        </div>
-                        <div class="panel-footer">
-                            <div class="row">
-                                <div class="col-sm-6 col-sm-offset-3">
-                                    <button class="btn btn-primary" id="save-role-permissions">保存</button>
-                                </div>
-                            </div>
-                        </div><!-- panel-footer -->
-
-                    </form>
-
+@section('include-content')
+    <div class="am-g am-padding-left am-padding-right">
+        <form action="{{ route('admin.role.permissions',['id'=>$role->id]) }}" method="post" id="role-permissions-form">
+            <ul class="am-nav">
+                <li class="">
+                    <span class="panel-title">编辑[<b>{{ $role->display_name }}</b>]权限</span>
+                    <hr style="margin: 4px 0" />
+                </li>
+                @foreach($permissions as $permission)
+                    <li>
+                        <div class="am-checkbox"><label>
+                            @if(in_array($permission['id'],array_keys($rolePermissions)))
+                                <input type="checkbox" name="permissions[]" value="{{ $permission['id'] }}" class="am-field-valid" checked/>
+                            @else
+                                <input type="checkbox" name="permissions[]" value="{{ $permission['id'] }}" class="am-field-valid"/>
+                            @endif
+                                &nbsp;&nbsp;{{ $permission['display_name'] }}
+                        </label></div>
+                        @if(count($permission['subPermission']))
+                            <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-6 am-thumbnails am-padding-left-lg am-padding-right-lg">
+                                @foreach($permission['subPermission'] as $sub)
+                                    <li>
+                                        <div class="am-checkbox"><label>
+                                            @if($sub['is_menu'])
+                                            <input type="checkbox" name="permissions[]"
+                                                   value="{{ $sub['id'] }}"
+                                                   pid="{{ $permission['id'] }}"
+                                                   class="sub-permission-checkbox" {{ in_array($sub['id'],array_keys($rolePermissions)) ? 'checked':'' }}/>&nbsp;&nbsp;
+                                                <span class="am-icon-reorder"></span>{{ $sub['display_name'] }}
+                                            @else
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="{{ $sub['id'] }}"
+                                                       pid="{{ $permission['id'] }}"
+                                                       class="sub-permission-checkbox" {{ in_array($sub['id'],array_keys($rolePermissions)) ? 'checked':'' }}/>&nbsp;&nbsp;{{ $sub['display_name'] }}
+                                            @endif
+                                        </label></div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+            {{ csrf_field() }}
+            <div class="am-form-group">
+                <div class="am-u-sm-9 am-u-sm-push-3">
+                    <button type="submit" class="am-btn am-btn-primary">保存</button>
                 </div>
-
-            </div><!-- col-sm-9 -->
-
-        </div><!-- row -->
-
+            </div>
+            {{--<div class="panel-footer">--}}
+                {{--<div class="row">--}}
+                    {{--<div class="col-sm-6 col-sm-offset-3">--}}
+                        {{--<button class="btn btn-primary" id="save-role-permissions">保存</button>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div><!-- panel-footer -->--}}
+        </form>
     </div>
-
 @endsection
 
 @section('javascript')
@@ -121,4 +106,13 @@
             });
         });
     </script>
+@endsection
+
+@section('include-js')
+    <script src="{{ asset('refer/zTree/jquery.ztree.all-3.5.min.js') }}"></script>
+    <script src="{{ asset('inc/ztree.js') }}"></script>
+    <script src="{{ asset('inc/management.js') }}"></script>
+    <script src="{{ asset('inc/admin/admin.js') }}"></script>
+    <script src="{{ asset('inc/admin/role/role.js') }}"></script>
+    <script src="{{ asset('inc/admin/role/role-permission.js') }}"></script>
 @endsection

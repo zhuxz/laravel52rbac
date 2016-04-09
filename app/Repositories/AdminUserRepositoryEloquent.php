@@ -41,8 +41,10 @@ class AdminUserRepositoryEloquent extends BaseRepository implements AdminUserRep
         $id = $this->model->insertGetId([
             'name' => $payload['name'],
             'email' => $payload['email'],
-            'organization_id' => $payload['organization_id'],
             'password' => bcrypt($payload['password']),
+            'organization_id' => $payload['organization_id'],
+            'real_name' => $payload['real_name'],
+            'mobile' => $payload['mobile'],
             'is_super' => $payload['is_super']
         ]);
 
@@ -86,7 +88,12 @@ class AdminUserRepositoryEloquent extends BaseRepository implements AdminUserRep
         }
         $data['name'] = $attributes['name'];
         $data['email'] = $attributes['email'];
-        $data['is_super'] = $attributes['is_super'];
+        $data['organization_id'] = $attributes['organization_id'];
+        $data['real_name'] = $attributes['real_name'];
+        $data['mobile'] = $attributes['mobile'];
+        if(array_key_exists("is_super", $attributes)) {
+            $data['is_super'] = $attributes['is_super'];
+        }
         $result = parent::update($data, $id);
         if(!$result) {
             return [

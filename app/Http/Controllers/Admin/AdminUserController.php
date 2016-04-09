@@ -83,7 +83,6 @@ class AdminUserController extends BaseController
      */
     public function store(CreateRequest $request)
     {
-//        $req = CreateRequest::createFromBase($request);
         $result = $this->adminUser->store($request->all());
         if(!$result) {
             Toastr::error('新用户添加失败!');
@@ -110,16 +109,21 @@ class AdminUserController extends BaseController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         Breadcrumbs::register('admin-user-edit', function ($breadcrumbs) use ($id) {
             $breadcrumbs->parent('admin-user');
             $breadcrumbs->push('编辑用户', route('admin.user.edit', ['id' => $id]));
         });
 
-        $user = $this->adminUser->find($id);
-        $hasRoles = $user->roles()->lists('name')->toArray();
-        return view('admin.rbac.admin_users.edit', compact('user', 'hasRoles'));
+        if ($request->ajax()) {
+            return SysHelper::getUserInfo($request);
+        } else {
+            $user = $this->adminUser->find($id);
+            $hasRoles = $user->roles()->lists('name')->toArray();
+            return view('admin.rbac.admin_users.edit', compact('user', 'hasRoles'));
+        }
+
     }
 
     /**
@@ -134,10 +138,12 @@ class AdminUserController extends BaseController
         $result = $this->adminUser->update($request->all(), $id);
         if(!$result['status']) {
             Toastr::error($result['msg']);
+            return redirect(route('admin.user.edit', ['id' => $id]));
         } else {
             Toastr::success('用户更新成功');
+            return redirect(route('admin.user.index'));
         }
-        return redirect(route('admin.user.edit', ['id' => $id]));
+
     }
 
     /**

@@ -1,0 +1,99 @@
+table.zj-table {
+    border-bottom: 1px solid #ddd;
+    font-size:1.4rem;
+}
+
+.zj-table > thead > tr > td,
+.zj-table > tbody > tr > td,
+.zj-table > tfoot > tr > td {
+	padding: 0.5rem;
+}
+
+.am-panel-zj{
+margin-bottom: 0px;
+}
+.am-nav-zj {
+margin-top: 0px;
+background-color: #f3f3f3;
+}
+li.am-panel-zj>a {
+color: inherit;
+}
+.am-nav-zj>li+li{margin-top:1px}
+.am-nav-zj>li{margin-top:1px}
+
+ul.am-nav-zj>li>ul>li>a>span {
+margin-left: 24px;
+}
+  
+.admin-content-list-zj {
+  border: none;
+}
+
+.admin-content-list-zj li {
+  border: none;
+  margin-top: 24px;
+}
+
+.zj-form select,
+.zj-form textarea,
+.zj-form input[type="text"],
+.zj-form input[type="password"],
+.zj-form input[type="datetime"],
+.zj-form input[type="datetime-local"],
+.zj-form input[type="date"],
+.zj-form input[type="month"],
+.zj-form input[type="time"],
+.zj-form input[type="week"],
+.zj-form input[type="number"],
+.zj-form input[type="email"],
+.zj-form input[type="url"],
+.zj-form input[type="search"],
+.zj-form input[type="tel"],
+.zj-form input[type="color"],
+.zj-form-field {
+  padding: 0.2em;
+}
+
+.zj-form button {
+	/*background-color: #808080;*/
+	color: #ffffff;
+	margin: 1.7rem 0 0 0rem;
+}
+
+.am-form-group-search {
+	margin-bottom: 0rem;
+}
+
+label.zj-label {
+	margin-bottom: 0.2em;
+	font-weight: normal;
+}
+
+.search_block {
+	background-color: #E8E8E8;
+	padding: 0.8rem 1.6rem 0.8rem 1.6rem;
+}
+
+.search_block li {
+  padding-right: 0.5em;
+}
+
+.zj-topbar {
+	border-width:0 0 2px;
+	margin-bottom: 0.1rem;
+	background-color:#FFF
+}
+
+.search_btn.am-disabled {
+	border: solid 1px red;
+}
+
+table.zj-table a.am-btn {
+    padding: 0.2rem 0.5rem;
+}
+
+.am-breadcrumb-zj {
+	padding: 0;
+	margin-bottom: 0;
+}
